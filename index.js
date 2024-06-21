@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { fetchBoms } = require('./api/bom/bom');
 const { fetchSalesOrder } = require('./api/sales_orders/salesOrder');
-const { getAllWorkCenters, getWorkCenterById } = require('./api/work_center/workcenter')
+const { getAllWorkCenters, getWorkCenterById, createWorkCenter } = require('./api/work_center/workcenter')
 
 const fetchData = async () =>{
     try {
@@ -15,7 +15,37 @@ const fetchData = async () =>{
         console.error('Error fetching data:', error.message);
     }
 }
-fetchData();
+
+const insertionData = {
+    "WorkCenterInternalID": "10000205",
+    "WorkCenterTypeCode": "A",
+    "WorkCenter": "WCtest5",
+    "Plant": "HH00",
+    "StandardWorkFormulaParamGroup": "SAP1",
+    "WorkCenterUsage": "009",
+    "WorkCenterResponsible": "000",
+    "WorkCenterCategoryCode": "0001",
+    "to_WorkCenterDescription": [
+      {
+        "WorkCenterInternalID": "10000201",
+        "WorkCenterTypeCode": "A",
+        "Language": "EN",
+        "WorkCenterDesc": "TEST Work Center Descriptions testtt5"
+      }
+    ]
+  }
+
+const createData = async(insertionData) =>{
+    try {
+        console.log("processing the post request ...");
+        const postWorkCenter = await createWorkCenter(insertionData);
+        console.log(postWorkCenter)
+    } catch (err) {
+        console.error('Error fetching data:', err.message);
+    }
+}
+createData(insertionData);
+//fetchData();
 
 process.on("uncaughtException", function (err) {
     console.error(
