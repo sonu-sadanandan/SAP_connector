@@ -1,29 +1,32 @@
+const { response } = require('express');
 const { auth } = require('../../auth/auth');
 const axios = require('axios');
 const SAP_BASE_URL = process.env.BASE_URL;
 const WORK_CENTER = "API_WORK_CENTERS/A_WorkCenterAllCapacity/";
+require('dotenv').config();
 
-const axiosInstance = axios.create({
-    baseURL: 'https://a20z.ucc.ovgu.de/sap/opu/odata/sap',
-    withCredentials: true, // To handle cookies
-    headers: {
-        'Authorization': `Basic ${Buffer.from(`${process.env.USER_NAME}:${process.env.PASSWORD}`).toString('base64')}`,
-        'Content-Type': 'application/json'
-    }
-});
+const username = process.env.USER_NAME;
+const password = process.env.PASSWORD;
+const host = 'a20z.ucc.ovgu.de';
+const endpointUrl = `https://${host}/sap/opu/odata/sap/API_WORK_CENTERS/A_WorkCenters`;
 
 async function getCsrfToken() {
     try {
-        const response = await axiosInstance.get('/API_WORK_CENTERS', {
+        const response = await axios.get(endpointUrl, {
+            auth: {
+                username: username,
+                password: password
+            },
             headers: {
                 'x-csrf-token': 'Fetch'
             }
         });
-
         const csrfToken = response.headers['x-csrf-token'];
-        return csrfToken;
+        const cookies = response.headers['set-cookie'];
+
+        return { csrfToken, cookies };
     } catch (error) {
-        console.error('Error fetching CSRF token:', error.response ? error.response.data : error.message);
+        console.error('Error fetching CSRF token:', error);
         throw error;
     }
 }
@@ -31,20 +34,17 @@ async function getCsrfToken() {
 
 const getAllWorkCenters = async () => {
     const url = `${SAP_BASE_URL}${WORK_CENTER}?$top=20&$inlinecount=allpages&$format=json`
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        'Authorization': `Basic ${auth}`
-      }
-    });
-    return response.data;
-
-    // Optionally save the data to a file
-    // const filePath = path.join(__dirname, 'data.json');
-    // fs.writeFileSync(filePath, JSON.stringify(response.data, null, 2));
-  } catch (error) {
-    console.error('Error fetching data:', error.message);
-  }
+    try {
+        const response = await axios.get(url, {
+        headers: {
+            'Authorization': `Basic ${auth}`
+        }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+        throw error;
+    }
 };
 
 const getWorkCenterById = async (WorkCenterInternalID) => {
@@ -56,34 +56,30 @@ const getWorkCenterById = async (WorkCenterInternalID) => {
             }
         });
         return response.data;
-    
-        // Optionally save the data to a file
-        // const filePath = path.join(__dirname, 'data.json');
-        // fs.writeFileSync(filePath, JSON.stringify(response.data, null, 2));
     } catch (error) {
-      console.error('Error fetching data:', error.message);
+        console.error('Error fetching data:', error.message);
+        throw error;
     }
   };
 
   const createWorkCenter = async (insertionData) => {
     try {
-        const response = await axios.get(`https://A20Z.UCC.OVGU.DE:443/sap/opu/odata/sap/API_WORK_CENTERS?$format=json`, {
-            headers: {
-                'Authorization': `Basic ${auth}`,
-                'x-csrf-token': 'fetch'
-            }
-        });
-        const csrfToken = response.headers['x-csrf-token'];
-        const url = `https://a20z.ucc.ovgu.de/sap/opu/odata/sap/API_WORK_CENTERS/A_WorkCenters`;
-        const postResponse = await axios.post(url, insertionData, {
+        const {csrfToken, cookies} = await getCsrfToken();
+        const postResponse = await axios.post(endpointUrl, insertionData, {
+            auth: {
+                username: username,
+                password: password
+            },
             headers: {
                 'x-csrf-token': csrfToken,
-                'Authorization': `Basic ${auth}`    
+                'Content-Type': 'application/json',
+                'Cookie': cookies
             }
         });
         return postResponse;
     } catch (error) {
         console.error("Error fetching data:", error.message);
+        throw error;
     }
   }
 

@@ -6,18 +6,19 @@ const url = "https://a20z.ucc.ovgu.de/sap/opu/odata/sap/API_BILL_OF_MATERIAL_SRV
 
 const fetchBoms = async () => {
   try {
-    const response = await axios.get(url, {
-      headers: {
-        'Authorization': `Basic ${auth}`
-      }
-    });
-    return response.data;
+      const response = await axios.get(url, {
+        headers: {
+          'Authorization': `Basic ${auth}`
+        }
+      });
+      return response.data;
 
-    // Optionally save the data to a file
-    // const filePath = path.join(__dirname, 'data.json');
-    // fs.writeFileSync(filePath, JSON.stringify(response.data, null, 2));
+      // Optionally save the data to a file
+      // const filePath = path.join(__dirname, 'data.json');
+      // fs.writeFileSync(filePath, JSON.stringify(response.data, null, 2));
   } catch (error) {
-    console.error('Error fetching data:', error.message);
+      console.error('Error fetching data:', error.message);
+      throw error;
   }
 };
 
