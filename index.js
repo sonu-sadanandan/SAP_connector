@@ -7,9 +7,9 @@ const fetchData = async () =>{
     try {
         console.log("Process started... ");
         const boms = await fetchBoms();
-        // const salesOrder = await fetchSalesOrder();
-        // const workCenters = await getAllWorkCenters();
-        // const workCenterById = await getWorkCenterById(10000065)
+        const salesOrder = await fetchSalesOrder();
+        const workCenters = await getAllWorkCenters();
+        const workCenterById = await getWorkCenterById(10000065)
         console.log(boms)
     } catch (error) {
         console.error('Error fetching data:', error.message);
@@ -17,9 +17,9 @@ const fetchData = async () =>{
 }
 
 const insertionData = {
-    "WorkCenterInternalID": "10000205",
+    "WorkCenterInternalID": "10000208",
     "WorkCenterTypeCode": "A",
-    "WorkCenter": "WCtest5",
+    "WorkCenter": "WCtest8",
     "Plant": "HH00",
     "StandardWorkFormulaParamGroup": "SAP1",
     "WorkCenterUsage": "009",
@@ -30,7 +30,7 @@ const insertionData = {
         "WorkCenterInternalID": "10000201",
         "WorkCenterTypeCode": "A",
         "Language": "EN",
-        "WorkCenterDesc": "TEST Work Center Descriptions testtt5"
+        "WorkCenterDesc": "TEST Work Center Descriptions testtt8"
       }
     ]
   }
@@ -38,8 +38,8 @@ const insertionData = {
 const createData = async(insertionData) =>{
     try {
         console.log("processing the post request ...");
-        const postWorkCenter = await createWorkCenter(insertionData);
-        console.log(postWorkCenter)
+        const response = await createWorkCenter(insertionData);
+        console.log(response)
     } catch (err) {
         console.error('Error fetching data:', err.message);
     }

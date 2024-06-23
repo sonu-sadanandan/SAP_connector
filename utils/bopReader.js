@@ -45,7 +45,7 @@ const processCSV = (filePath) => {
 };
 
 // Path to your CSV file
-const csvFilePath = '../data/bop.csv'; // Replace with the actual path to your CSV file
+const csvFilePath = '../data/bop_example.csv'; // Replace with the actual path to your CSV file
 
 // Process the CSV file
 processCSV(csvFilePath);
