@@ -6,7 +6,7 @@ require('dotenv').config();
 // Basic Authentication credentials
 const username = process.env.USER_NAME;
 const password = process.env.PASSWORD;
-const host = 'a20z.ucc.ovgu.de';  // Replace with your host
+const host = 'a20z.ucc.ovgu.de'; 
 
 // URLs for the endpoints
 const Material_URL = `https://${host}/sap/opu/odata/sap/API_PRODUCT_SRV/A_Product`;
@@ -42,17 +42,38 @@ async function makePostRequest(url, data, csrfToken, cookies) {
 
 // Function to read CSV and perform POST requests
 async function processCSV() {
-    const results = [];
-  
-    fs.createReadStream('mbom-15.06.24.csv')
-      .pipe(csv())
-      .on('data', (data) => results.push(data))
-      .on('end', async () => {
-        // Assuming we only process the first row for this example
-        if (results.length > 0) {
-          const row = results[0];
+  const results = [];
+
+  fs.createReadStream('mbom-15.06.24.csv')
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', async () => {
+      if (results.length > 1) {
+        const { csrfToken, cookies } = await fetchTokenAndCookies();
+
+        // Iterate over the rows, starting from the second row
+        for (let i = 1; i < results.length; i++) {
+          const row = results[i];
           const productDescription = row['Display Name'];
-          const product = row['Name(R)'].toUpperCase();
+          const product = row['Name'].replace(/[\s.]/g, '-').toUpperCase(); // Convert to upper case
+          const depth = parseInt(row['Depth']);
+          const previousRow = results[i - 1];
+          const previousName = previousRow['Name'];
+
+          let bomItemDescription = '';
+
+          if (depth === 1) {
+            bomItemDescription = `Child of ${previousName}`;
+          } else {
+            for (let j = i - 1; j >= 0; j--) {
+              if (parseInt(results[j]['Depth']) === depth - 1) {
+                bomItemDescription = `Child of ${results[j]['Name']}`;
+                break;
+              }
+            }
+          }
+
+
 // JSON body for the POST requests
 const Material_POST = {               
     "Product": product,
@@ -71,12 +92,13 @@ const Material_POST = {
 };
 
 const BOM_POST = {
-    "BillOfMaterial": "00034033",
+    "BillOfMaterial": "00034035",
     "BillOfMaterialCategory": "M",
     "BillOfMaterialVariant": "1",
     "BillOfMaterialItemNodeNumber": "1",
-    "Material": "53",
-    // "Plant": "HH00",
+    "Material": "RC-CAR",
+    "Plant": "HH00",
+    "BOMItemDescription": bomItemDescription,
     "BillOfMaterialComponent": product,
     "BillOfMaterialItemUnit": "EA",
     "BillOfMaterialItemQuantity": "1",
@@ -84,16 +106,17 @@ const BOM_POST = {
 };
 
 try {
-    const { csrfToken, cookies } = await fetchTokenAndCookies();
+    // const { csrfToken, cookies } = await fetchTokenAndCookies();
 
     await makePostRequest(Material_URL, Material_POST, csrfToken, cookies);
     await makePostRequest(BOM_URL, BOM_POST, csrfToken, cookies);
 
-    console.log('POST requests successful');
+    console.log(`POST requests successful for row ${i + 1}`);
   } catch (error) {
-    console.error('Error making POST requests:', error);
+    console.error(`Error making POST requests for row ${i + 1}:`, error);
   }
 }
+      }
 });
 }
 
