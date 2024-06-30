@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { fetchBoms } = require('./api/bom/bom');
+const { fetchBoms } = require('./api/bom/fetchAllBom');
 const { fetchSalesOrder } = require('./api/sales_orders/salesOrder');
 const { getAllWorkCenters, getWorkCenterById, createWorkCenter } = require('./api/work_center/workcenter')
 

@@ -54,8 +54,8 @@ async function processCSV() {
         // Iterate over the rows, starting from the second row
         for (let i = 1; i < results.length; i++) {
           const row = results[i];
-          const productDescription = row['Display Name'];
-          const product = row['Name'].replace(/[\s.]/g, '-').toUpperCase(); // Convert to upper case
+          const productDescription = row['Title(R)'].substring(0,39); // Convert to upper case and length of max 39 characters.
+          const product = row['Name'].replace(/[\s.]/g, '-').toUpperCase();  
           const depth = parseInt(row['Depth']);
           const previousRow = results[i - 1];
           const previousName = previousRow['Name'];
@@ -67,57 +67,56 @@ async function processCSV() {
           } else {
             for (let j = i - 1; j >= 0; j--) {
               if (parseInt(results[j]['Depth']) === depth - 1) {
-                bomItemDescription = `Child of ${results[j]['Name']}`;
+                let parentMaterial = results[j]['Name'].split(' ').pop().slice(-30);
+                parentMaterial = parentMaterial.replace(/[\s.]/g, '-').toUpperCase()
+                bomItemDescription = `Child of ${parentMaterial}`;
                 break;
               }
             }
           }
 
+        // JSON body for the POST requests
+        const Material_POST = {               
+            "Product": product,
+            "ProductType": "HALB",
+            "IndustrySector": "M",
+            "BaseUnit": "EA",
+            "to_Description": [{
+                "Product": product,
+                "Language": "EN",
+                "ProductDescription": productDescription
+            }],
+            "to_Plant": [{
+                "Product": product,
+                "Plant": "HH00"
+            }]
+        };
 
-// JSON body for the POST requests
-const Material_POST = {               
-    "Product": product,
-    "ProductType": "HALB",
-    "IndustrySector": "M",
-    "BaseUnit": "EA",
-    "to_Description": [{
-        "Product": product,
-        "Language": "EN",
-        "ProductDescription": productDescription
-    }],
-    "to_Plant": [{
-        "Product": product,
-        "Plant": "HH00"
-     }]
-};
+        const BOM_POST = {
+            "BillOfMaterial": "00034035",
+            "BillOfMaterialCategory": "M",
+            "BillOfMaterialVariant": "1",
+            "BillOfMaterialItemNodeNumber": "1",
+            "Material": "RC-CAR",
+            "Plant": "HH00",
+            "BOMItemDescription": bomItemDescription,
+            "BillOfMaterialComponent": product,
+            "BillOfMaterialItemUnit": "EA",
+            "BillOfMaterialItemQuantity": "1",
+            "BillOfMaterialItemCategory": "L"
+        };
 
-const BOM_POST = {
-    "BillOfMaterial": "00034035",
-    "BillOfMaterialCategory": "M",
-    "BillOfMaterialVariant": "1",
-    "BillOfMaterialItemNodeNumber": "1",
-    "Material": "RC-CAR",
-    "Plant": "HH00",
-    "BOMItemDescription": bomItemDescription,
-    "BillOfMaterialComponent": product,
-    "BillOfMaterialItemUnit": "EA",
-    "BillOfMaterialItemQuantity": "1",
-    "BillOfMaterialItemCategory": "L"
-};
+        try {
+            await makePostRequest(Material_URL, Material_POST, csrfToken, cookies);
+            await makePostRequest(BOM_URL, BOM_POST, csrfToken, cookies);
 
-try {
-    // const { csrfToken, cookies } = await fetchTokenAndCookies();
-
-    await makePostRequest(Material_URL, Material_POST, csrfToken, cookies);
-    await makePostRequest(BOM_URL, BOM_POST, csrfToken, cookies);
-
-    console.log(`POST requests successful for row ${i + 1}`);
-  } catch (error) {
-    console.error(`Error making POST requests for row ${i + 1}:`, error);
-  }
-}
+            console.log(`POST requests successful for row ${i + 1}`);
+          } catch (error) {
+            console.error(`Error making POST requests for row ${i + 1}:`, error);
+          }
+        }
       }
-});
+    });
 }
 
 processCSV();
