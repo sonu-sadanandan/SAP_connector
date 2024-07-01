@@ -2,6 +2,7 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const axios = require('axios');
 require('dotenv').config();
+const chokidar = require("chokidar");
 
 const username = process.env.USER_NAME;
 const password = process.env.PASSWORD;
@@ -241,6 +242,21 @@ const processCSV = async (filePath) => {
 };
 
 const csvFilePath = '../../data/bop_example.csv'; 
+const watcher = chokidar.watch(csvFilePath, {
+    persistent: true,
+    ignoreInitial: true, // Ignore the initial add event
+    awaitWriteFinish: {
+        stabilityThreshold: 1000, // Wait for 1 second after the last change
+        pollInterval: 100 // Check every 100ms for changes
+    }
+});
 
+watcher
+    .on('change', path => {
+        console.log(`File ${path} has been changed`);
+        processCSV(path);
+    })
+    .on('error', error => console.error(`Watcher error: ${error}`));
 // Process the CSV file
-processCSV(csvFilePath);
+console.log(`Watching for changes in ${filePath}`);
+// processCSV(csvFilePath);
