@@ -5,8 +5,8 @@ const chokidar = require('chokidar');
 require('dotenv').config();
 
 // Basic Authentication credentials
-const username = '';
-const password = '';
+const username = process.env.USER_NAME;
+const password = process.env.PASSWORD;
 const host = 'a20z.ucc.ovgu.de'; 
 
 // URLs for the endpoints
