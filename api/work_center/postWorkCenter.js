@@ -241,7 +241,7 @@ const processCSV = async (filePath) => {
     }
 };
 
-const csvFilePath = '../../data/bop_example.csv'; 
+const csvFilePath = './bop_example.csv'; 
 const watcher = chokidar.watch(csvFilePath, {
     persistent: true,
     ignoreInitial: true, // Ignore the initial add event
@@ -254,9 +254,10 @@ const watcher = chokidar.watch(csvFilePath, {
 watcher
     .on('change', path => {
         console.log(`File ${path} has been changed`);
-        processCSV(path);
+        // processCSV(path);
+        console.log(path)
     })
     .on('error', error => console.error(`Watcher error: ${error}`));
 // Process the CSV file
-console.log(`Watching for changes in ${filePath}`);
+console.log(`Watching for changes in ${csvFilePath}`);
 // processCSV(csvFilePath);
