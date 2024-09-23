@@ -1,0 +1,40 @@
+Depth,Display Name,Revision(R),Maturity State(R),Description(R),Estimated time(R),Time Mode(R),Cycle Time(R)
+1,BOP-RaceCar-V3.1 A,A,In Work,,,,0s
+2,"Front Axel, Rear Axel and Chessis Assemble A (General System00000187.1)",A,In Work,,,,0s
+3,Front Axel A (Front Axel.1),A,In Work,,10s,Estimated Time,
+3,Assemble Front Axel and Chassis A (Assemble Front Axel and Chassis.1),A,In Work,,10s,Estimated Time,
+3,Manufecturing Chessis A (Manufecturing Chessis.1),A,In Work,,10s,Estimated Time,
+3,Raw materials of chasssis A (Raw materials of chasssis.2),A,In Work,,10s,Estimated Time,
+3,Rear Axel A (Rear Axel.3),A,In Work,,10s,Estimated Time,
+3,Assembly Raer Axel with front Axel And Chessis A (Assembly Raer Axel with front Axel And Chessis.2),A,In Work,,10s,Estimated Time,
+2,Center Chassis Components Assembly A (General System00000188.2),A,In Work,,,,0s
+3,Moter A (Moter.4),A,In Work,,10s,Estimated Time,
+3,Slipper Clutch A (Slipper Clutch.5),A,In Work,,10s,Estimated Time,
+3,Drive Shaft A (Drive Shaft.6),A,In Work,,10s,Estimated Time,
+3,Steering Serve A (Steering Serve.7),A,In Work,,10s,Estimated Time,
+3,Assemble with manufactured Parts A (Assemble with manufactured Parts.3),A,In Work,,10s,Estimated Time,
+2,Platefrom Components Assembly A (General System00000190.2),A,In Work,,,,0s
+3,Hokyo Lidar A (Hokyo Lidar.3),A,In Work,,10s,Estimated Time,
+3,VESC A (VESC.3),A,In Work,,10s,Estimated Time,
+3,Power Board A A (Power Board A.8),A,In Work,,10s,Estimated Time,
+3,Power Board B A (Power Board B.9),A,In Work,,10s,Estimated Time,
+3,Jetson Nano A (Jetson Nano.10),A,In Work,,10s,Estimated Time,
+3,Wifi Antenna A (Wifi Antenna.12),A,In Work,,10s,Estimated Time,
+3,Asemble Compopents A (Asemble Compopents.2),A,In Work,,10s,Estimated Time,
+3,Maouting parts A (Maouting parts.3),A,In Work,,10s,Estimated Time,
+3,Wifi Mount A (Wifi Mount.1),A,In Work,,10s,Estimated Time,
+2,Assemble Part with Cables A (General System00000191.3),A,In Work,,,,0s
+3,Cables A (Cables.13),A,In Work,,10s,Estimated Time,
+3,Assemble RaceCar A (Assemble RaceCar.3),A,In Work,,10s,Estimated Time,
+2,Battery A (General System00000192.4),A,In Work,,,,0s
+3,Insert Battery A (Insert Battery.14),A,In Work,,10s,Estimated Time,
+3,Assemble Battery with RaceCar A (Assemble Battery with Car.4),A,In Work,,10s,Estimated Time,
+2,Testing A (General System00000193.5),A,In Work,,,,0s
+3,Loading Operation00000457 A (Loading Operation00000457.1),A,In Work,,10s,Estimated Time,
+2,Wifi Board and Lesarcutter A (General System00000189.1),A,In Work,,,,0s
+3,Raw Material for Lesarcutter A (Raw Material for Lesarcutter.1),A,In Work,,10s,Estimated Time,
+3,Manufecturing of Lasercutter A (Manufecturing of Lasercutter.1),A,In Work,,10s,Estimated Time,
+3,Manufecturing of Wifi Mount A (Manufecturing of Wifi Antenna.2),A,In Work,,10s,Estimated Time,
+3,Assemble Wifi and Lasercutter A (Assemble Wifi and Lasercutter.1),A,In Work,,10s,Estimated Time,
+3,Raw Material for Wifi Mount A (Raw Material for Wifi Mount.2),A,In Work,,10s,Estimated Time,
+3,Testing A (General System00000193.5),,,dfvdf,ajsjasd,sadcs,
